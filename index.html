@@ -1,0 +1,570 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Covenant — Cybersecurity & Web Dev</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Lexend:wght@100;200;300;400;500;600;700;800;900&display=swap" rel="stylesheet" />
+
+  <style>
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+    :root {
+      --black:   #000000;
+      --surface: #0a0a0a;
+      --panel:   #111111;
+      --border:  rgba(255,255,255,0.08);
+      --white:   #f5f5f7;
+      --dim:     #a1a1a6;
+      --accent:  #ffffff;
+      --green:   #30d158;
+      --blue:    #0a84ff;
+    }
+
+    html { scroll-behavior: smooth; }
+
+    body {
+      font-family: 'Lexend', sans-serif;
+      background: var(--black);
+      color: var(--white);
+      -webkit-font-smoothing: antialiased;
+      overflow-x: hidden;
+    }
+
+    /* ── NAV ── */
+    nav {
+      position: fixed; top: 0; left: 0; right: 0; z-index: 100;
+      display: flex; align-items: center; justify-content: space-between;
+      padding: 0 5vw;
+      height: 52px;
+      background: rgba(0,0,0,0.72);
+      backdrop-filter: saturate(180%) blur(20px);
+      -webkit-backdrop-filter: saturate(180%) blur(20px);
+      border-bottom: 1px solid var(--border);
+    }
+    .nav-logo {
+      font-size: 1rem; font-weight: 600; letter-spacing: -0.02em;
+      color: var(--white); text-decoration: none;
+    }
+    .nav-links { display: flex; gap: 2rem; list-style: none; }
+    .nav-links a {
+      font-size: 0.78rem; font-weight: 400; color: var(--dim);
+      text-decoration: none; transition: color .2s;
+      letter-spacing: 0.01em;
+    }
+    .nav-links a:hover { color: var(--white); }
+
+    /* ── HERO ── */
+    .hero {
+      min-height: 100vh;
+      display: flex; flex-direction: column;
+      align-items: center; justify-content: center;
+      text-align: center;
+      padding: 10rem 2rem 6rem;
+      position: relative;
+      overflow: hidden;
+    }
+    .hero::before {
+      content: '';
+      position: absolute; inset: 0;
+      background:
+        radial-gradient(ellipse 60% 40% at 50% 0%, rgba(255,255,255,0.04) 0%, transparent 70%),
+        radial-gradient(ellipse 40% 30% at 20% 80%, rgba(10,132,255,0.06) 0%, transparent 60%),
+        radial-gradient(ellipse 35% 25% at 80% 70%, rgba(48,209,88,0.04) 0%, transparent 60%);
+      pointer-events: none;
+    }
+
+    /* Subtle grid */
+    .hero::after {
+      content: '';
+      position: absolute; inset: 0;
+      background-image:
+        linear-gradient(var(--border) 1px, transparent 1px),
+        linear-gradient(90deg, var(--border) 1px, transparent 1px);
+      background-size: 80px 80px;
+      mask-image: radial-gradient(ellipse 80% 60% at 50% 50%, black 0%, transparent 70%);
+      -webkit-mask-image: radial-gradient(ellipse 80% 60% at 50% 50%, black 0%, transparent 70%);
+      pointer-events: none;
+      opacity: 0.4;
+    }
+
+    .hero-eyebrow {
+      font-size: 0.72rem; font-weight: 500;
+      letter-spacing: 0.18em; text-transform: uppercase;
+      color: var(--dim); margin-bottom: 1.4rem;
+      opacity: 0; animation: fadeUp .8s .2s ease forwards;
+    }
+    .hero-name {
+      font-size: clamp(3.8rem, 10vw, 9rem);
+      font-weight: 700; letter-spacing: -0.04em;
+      line-height: 1.02; color: var(--white);
+      opacity: 0; animation: fadeUp .9s .35s ease forwards;
+    }
+    .hero-tagline {
+      font-size: clamp(1rem, 2.5vw, 1.4rem);
+      font-weight: 300; color: var(--dim);
+      margin-top: 1.4rem; max-width: 560px; line-height: 1.6;
+      opacity: 0; animation: fadeUp .9s .5s ease forwards;
+    }
+    .hero-pills {
+      display: flex; gap: .75rem; flex-wrap: wrap;
+      justify-content: center; margin-top: 2.4rem;
+      opacity: 0; animation: fadeUp .9s .65s ease forwards;
+    }
+    .pill {
+      padding: .4rem 1rem;
+      border: 1px solid var(--border);
+      border-radius: 999px;
+      font-size: 0.78rem; font-weight: 400;
+      color: var(--dim);
+      background: rgba(255,255,255,0.03);
+      transition: border-color .2s, color .2s;
+    }
+    .pill:hover { border-color: rgba(255,255,255,0.3); color: var(--white); }
+
+    .hero-cta {
+      display: flex; gap: 1rem; margin-top: 3rem;
+      opacity: 0; animation: fadeUp .9s .8s ease forwards;
+    }
+    .btn {
+      display: inline-flex; align-items: center; gap: .45rem;
+      padding: .65rem 1.6rem;
+      border-radius: 980px;
+      font-family: 'Lexend', sans-serif;
+      font-size: 0.85rem; font-weight: 500;
+      text-decoration: none; cursor: pointer;
+      border: none; transition: transform .2s, opacity .2s, background .2s;
+    }
+    .btn:hover { transform: scale(1.03); }
+    .btn-primary { background: var(--white); color: #000; }
+    .btn-primary:hover { background: #e0e0e0; }
+    .btn-outline {
+      background: transparent; color: var(--white);
+      border: 1px solid rgba(255,255,255,0.25);
+    }
+    .btn-outline:hover { background: rgba(255,255,255,0.06); }
+
+    /* ── SECTION SHARED ── */
+    section { padding: 7rem 5vw; }
+    .section-label {
+      font-size: 0.7rem; font-weight: 500;
+      letter-spacing: 0.16em; text-transform: uppercase;
+      color: var(--dim); margin-bottom: 1rem;
+    }
+    .section-title {
+      font-size: clamp(1.8rem, 4vw, 3.2rem);
+      font-weight: 600; letter-spacing: -0.03em;
+      line-height: 1.15; color: var(--white);
+      max-width: 680px;
+    }
+    .section-title em { font-style: normal; color: var(--dim); }
+    .divider {
+      width: 100%; height: 1px;
+      background: var(--border);
+      border: none;
+    }
+
+    /* ── ABOUT ── */
+    .about-inner {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 4rem; align-items: start;
+      margin-top: 4rem;
+    }
+    .about-text p {
+      font-size: 1.05rem; font-weight: 300;
+      line-height: 1.75; color: var(--dim);
+      margin-bottom: 1.2rem;
+    }
+    .about-text p strong { color: var(--white); font-weight: 500; }
+
+    .stat-grid {
+      display: grid; grid-template-columns: 1fr 1fr;
+      gap: 1.5px;
+      border: 1.5px solid var(--border);
+      border-radius: 18px; overflow: hidden;
+    }
+    .stat-card {
+      background: var(--panel);
+      padding: 2rem 1.6rem;
+      transition: background .2s;
+    }
+    .stat-card:hover { background: #161616; }
+    .stat-num {
+      font-size: 2.8rem; font-weight: 700;
+      letter-spacing: -0.05em; color: var(--white);
+    }
+    .stat-desc {
+      font-size: 0.8rem; font-weight: 400;
+      color: var(--dim); margin-top: .3rem;
+      letter-spacing: 0.01em;
+    }
+
+    /* ── EXPERTISE ── */
+    #expertise { background: var(--surface); }
+    .expertise-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+      gap: 1.5px;
+      margin-top: 3.5rem;
+      border: 1.5px solid var(--border);
+      border-radius: 20px; overflow: hidden;
+    }
+    .exp-card {
+      background: var(--panel); padding: 2.4rem;
+      transition: background .25s;
+      position: relative;
+    }
+    .exp-card:hover { background: #161616; }
+    .exp-icon {
+      width: 40px; height: 40px;
+      border-radius: 10px;
+      display: flex; align-items: center; justify-content: center;
+      font-size: 1.1rem; margin-bottom: 1.4rem;
+    }
+    .exp-card h3 {
+      font-size: 1.05rem; font-weight: 600;
+      color: var(--white); margin-bottom: .6rem;
+      letter-spacing: -0.01em;
+    }
+    .exp-card p {
+      font-size: 0.85rem; font-weight: 300;
+      color: var(--dim); line-height: 1.65;
+    }
+    .tag-list {
+      display: flex; flex-wrap: wrap; gap: .4rem; margin-top: 1.2rem;
+    }
+    .tag {
+      padding: .2rem .65rem;
+      border-radius: 999px;
+      border: 1px solid var(--border);
+      font-size: 0.72rem; color: var(--dim);
+    }
+
+    /* ── SERVICES ── */
+    .services-list {
+      margin-top: 3.5rem;
+      border-top: 1px solid var(--border);
+    }
+    .service-row {
+      display: flex; align-items: center; justify-content: space-between;
+      padding: 1.8rem 0;
+      border-bottom: 1px solid var(--border);
+      cursor: default;
+      transition: padding-left .25s;
+      gap: 1rem;
+    }
+    .service-row:hover { padding-left: .8rem; }
+    .service-row:hover .service-name { color: var(--white); }
+    .service-num {
+      font-size: 0.7rem; font-weight: 500; color: var(--dim);
+      letter-spacing: 0.1em; min-width: 2.5rem;
+    }
+    .service-name {
+      font-size: clamp(1.1rem, 2.5vw, 1.5rem);
+      font-weight: 500; color: #c0c0c5;
+      letter-spacing: -0.02em; flex: 1;
+      transition: color .25s;
+    }
+    .service-arrow {
+      font-size: 1.1rem; color: var(--dim);
+      transition: transform .25s, color .25s;
+    }
+    .service-row:hover .service-arrow {
+      transform: translateX(4px);
+      color: var(--white);
+    }
+
+    /* ── CONTACT ── */
+    #contact { text-align: center; }
+    .contact-inner {
+      max-width: 600px; margin: 0 auto;
+      padding-top: 3rem;
+    }
+    .contact-inner p {
+      font-size: 1rem; font-weight: 300;
+      color: var(--dim); line-height: 1.7;
+      margin-bottom: 2.5rem;
+    }
+    .contact-links {
+      display: flex; gap: 1rem;
+      justify-content: center; flex-wrap: wrap;
+    }
+
+    /* ── FOOTER ── */
+    footer {
+      padding: 2.5rem 5vw;
+      border-top: 1px solid var(--border);
+      display: flex; align-items: center; justify-content: space-between;
+      flex-wrap: wrap; gap: 1rem;
+    }
+    footer p {
+      font-size: 0.75rem; color: var(--dim); font-weight: 300;
+    }
+    .footer-badge {
+      font-size: 0.7rem; color: var(--dim);
+      border: 1px solid var(--border);
+      padding: .25rem .7rem; border-radius: 999px;
+    }
+
+    /* ── STATUS DOT ── */
+    .status {
+      display: inline-flex; align-items: center; gap: .45rem;
+      font-size: 0.72rem; color: var(--dim);
+      margin-bottom: 1.5rem;
+      padding: .3rem .8rem;
+      border: 1px solid var(--border);
+      border-radius: 999px;
+      opacity: 0; animation: fadeUp .8s .05s ease forwards;
+    }
+    .dot {
+      width: 6px; height: 6px; border-radius: 50%;
+      background: var(--green);
+      box-shadow: 0 0 6px var(--green);
+      animation: pulse 2s infinite;
+    }
+
+    /* ── SCROLL REVEAL ── */
+    .reveal {
+      opacity: 0; transform: translateY(28px);
+      transition: opacity .7s ease, transform .7s ease;
+    }
+    .reveal.visible { opacity: 1; transform: none; }
+
+    /* ── ANIMATIONS ── */
+    @keyframes fadeUp {
+      to { opacity: 1; transform: translateY(0); }
+      from { opacity: 0; transform: translateY(24px); }
+    }
+    @keyframes pulse {
+      0%, 100% { opacity: 1; }
+      50% { opacity: .4; }
+    }
+
+    /* ── RESPONSIVE ── */
+    @media (max-width: 760px) {
+      .about-inner { grid-template-columns: 1fr; }
+      .stat-grid { grid-template-columns: 1fr 1fr; }
+      .nav-links { display: none; }
+      .hero-cta { flex-direction: column; align-items: center; }
+    }
+  </style>
+</head>
+<body>
+
+  <!-- NAV -->
+  <nav>
+    <a href="#" class="nav-logo">Covenant</a>
+    <ul class="nav-links">
+      <li><a href="#about">About</a></li>
+      <li><a href="#expertise">Expertise</a></li>
+      <li><a href="#services">Services</a></li>
+      <li><a href="#contact">Contact</a></li>
+    </ul>
+  </nav>
+
+  <!-- HERO -->
+  <section class="hero">
+    <div class="status"><span class="dot"></span> Available for work</div>
+    <p class="hero-eyebrow">Cybersecurity · Web Development</p>
+    <h1 class="hero-name">Covenant</h1>
+    <p class="hero-tagline">
+      Building secure digital experiences. Protecting systems.<br/>
+      Crafting interfaces that perform and endure.
+    </p>
+    <div class="hero-pills">
+      <span class="pill">Penetration Testing</span>
+      <span class="pill">Full-Stack Dev</span>
+      <span class="pill">Network Security</span>
+      <span class="pill">UI / UX</span>
+      <span class="pill">DevSecOps</span>
+    </div>
+    <div class="hero-cta">
+      <a href="#contact" class="btn btn-primary">Get in Touch →</a>
+      <a href="#services" class="btn btn-outline">View Services</a>
+    </div>
+  </section>
+
+  <hr class="divider" />
+
+  <!-- ABOUT -->
+  <section id="about">
+    <p class="section-label reveal">About</p>
+    <h2 class="section-title reveal">Where security meets craftsmanship.</h2>
+    <div class="about-inner">
+      <div class="about-text reveal">
+        <p>
+          I'm <strong>Covenant</strong> — a cybersecurity professional and full-stack web developer
+          with a passion for building things that are both beautiful and bulletproof.
+        </p>
+        <p>
+          My work sits at the intersection of <strong>offensive security</strong> and
+          <strong>modern web engineering</strong>. I identify vulnerabilities before bad actors do,
+          and I build web systems designed to stand the test of real-world threats.
+        </p>
+        <p>
+          Whether it's a penetration test, a secure API, or a pixel-perfect front-end — I treat
+          every project with the same relentless attention to detail.
+        </p>
+      </div>
+      <div class="stat-grid reveal">
+        <div class="stat-card">
+          <div class="stat-num">50+</div>
+          <div class="stat-desc">Security audits completed</div>
+        </div>
+        <div class="stat-card">
+          <div class="stat-num">30+</div>
+          <div class="stat-desc">Web projects shipped</div>
+        </div>
+        <div class="stat-card">
+          <div class="stat-num">99%</div>
+          <div class="stat-desc">Client satisfaction rate</div>
+        </div>
+        <div class="stat-card">
+          <div class="stat-num">5+</div>
+          <div class="stat-desc">Years of experience</div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <hr class="divider" />
+
+  <!-- EXPERTISE -->
+  <section id="expertise">
+    <p class="section-label reveal">Expertise</p>
+    <h2 class="section-title reveal">Two disciplines.<br/><em>One focused mind.</em></h2>
+    <div class="expertise-grid">
+      <div class="exp-card reveal">
+        <div class="exp-icon" style="background:rgba(10,132,255,0.12); color:#0a84ff;">🛡</div>
+        <h3>Penetration Testing</h3>
+        <p>Simulating real-world attacks to find weaknesses before adversaries do. Web, mobile, and network-layer assessments.</p>
+        <div class="tag-list">
+          <span class="tag">OWASP</span><span class="tag">Burp Suite</span><span class="tag">Metasploit</span>
+        </div>
+      </div>
+      <div class="exp-card reveal" style="transition-delay:.08s">
+        <div class="exp-icon" style="background:rgba(48,209,88,0.12); color:#30d158;">🔐</div>
+        <h3>Network Security</h3>
+        <p>Designing and hardening network architectures. Firewall policy, IDS/IPS configuration, and incident response.</p>
+        <div class="tag-list">
+          <span class="tag">Wireshark</span><span class="tag">Nmap</span><span class="tag">pfSense</span>
+        </div>
+      </div>
+      <div class="exp-card reveal" style="transition-delay:.16s">
+        <div class="exp-icon" style="background:rgba(255,214,10,0.1); color:#ffd60a;">⚡</div>
+        <h3>Full-Stack Development</h3>
+        <p>From RESTful APIs to responsive UIs — shipping fast, accessible, production-ready web applications.</p>
+        <div class="tag-list">
+          <span class="tag">React</span><span class="tag">Node.js</span><span class="tag">PostgreSQL</span>
+        </div>
+      </div>
+      <div class="exp-card reveal" style="transition-delay:.24s">
+        <div class="exp-icon" style="background:rgba(191,90,242,0.12); color:#bf5af2;">🎨</div>
+        <h3>UI / UX Design</h3>
+        <p>Translating complex systems into clean, intuitive interfaces. Design that serves both the user and the brief.</p>
+        <div class="tag-list">
+          <span class="tag">Figma</span><span class="tag">CSS / Tailwind</span><span class="tag">Motion</span>
+        </div>
+      </div>
+      <div class="exp-card reveal" style="transition-delay:.32s">
+        <div class="exp-icon" style="background:rgba(10,132,255,0.08); color:#0a84ff;">☁️</div>
+        <h3>DevSecOps</h3>
+        <p>Embedding security into every phase of the development pipeline. CI/CD, container hardening, secret management.</p>
+        <div class="tag-list">
+          <span class="tag">Docker</span><span class="tag">GitHub Actions</span><span class="tag">AWS</span>
+        </div>
+      </div>
+      <div class="exp-card reveal" style="transition-delay:.4s">
+        <div class="exp-icon" style="background:rgba(255,159,10,0.1); color:#ff9f0a;">🔎</div>
+        <h3>OSINT & Recon</h3>
+        <p>Gathering and analysing open-source intelligence to map attack surfaces and support threat modelling exercises.</p>
+        <div class="tag-list">
+          <span class="tag">Shodan</span><span class="tag">Maltego</span><span class="tag">OSINT Framework</span>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <hr class="divider" />
+
+  <!-- SERVICES -->
+  <section id="services">
+    <p class="section-label reveal">Services</p>
+    <h2 class="section-title reveal">What I can do for you.</h2>
+    <div class="services-list">
+      <div class="service-row reveal">
+        <span class="service-num">01</span>
+        <span class="service-name">Security Audit & Vulnerability Assessment</span>
+        <span class="service-arrow">→</span>
+      </div>
+      <div class="service-row reveal" style="transition-delay:.06s">
+        <span class="service-num">02</span>
+        <span class="service-name">Custom Web Application Development</span>
+        <span class="service-arrow">→</span>
+      </div>
+      <div class="service-row reveal" style="transition-delay:.12s">
+        <span class="service-num">03</span>
+        <span class="service-name">API Design & Secure Backend Engineering</span>
+        <span class="service-arrow">→</span>
+      </div>
+      <div class="service-row reveal" style="transition-delay:.18s">
+        <span class="service-num">04</span>
+        <span class="service-name">Penetration Testing (Web, Mobile, Network)</span>
+        <span class="service-arrow">→</span>
+      </div>
+      <div class="service-row reveal" style="transition-delay:.24s">
+        <span class="service-num">05</span>
+        <span class="service-name">Security Training & Awareness Programs</span>
+        <span class="service-arrow">→</span>
+      </div>
+      <div class="service-row reveal" style="transition-delay:.3s">
+        <span class="service-num">06</span>
+        <span class="service-name">DevSecOps Integration & CI/CD Hardening</span>
+        <span class="service-arrow">→</span>
+      </div>
+    </div>
+  </section>
+
+  <hr class="divider" />
+
+  <!-- CONTACT -->
+  <section id="contact">
+    <p class="section-label reveal" style="text-align:center">Contact</p>
+    <h2 class="section-title reveal" style="margin:0 auto; text-align:center">Let's build something<br/><em>worth protecting.</em></h2>
+    <div class="contact-inner reveal">
+      <p>
+        Whether you need a security assessment, a new web platform, or a long-term partner who understands both worlds — I'm ready to talk.
+      </p>
+      <div class="contact-links">
+        <a href="mailto:hello@covenant.dev" class="btn btn-primary">Email Me →</a>
+        <a href="#" class="btn btn-outline">LinkedIn</a>
+        <a href="#" class="btn btn-outline">GitHub</a>
+        <a href="#" class="btn btn-outline">Twitter / X</a>
+      </div>
+    </div>
+  </section>
+
+  <!-- FOOTER -->
+  <footer>
+    <p>© 2026 Covenant. All rights reserved.</p>
+    <span class="footer-badge">Built with precision ✦</span>
+  </footer>
+
+  <script>
+    // Scroll reveal
+    const reveals = document.querySelectorAll('.reveal');
+    const observer = new IntersectionObserver((entries) => {
+      entries.forEach(e => {
+        if (e.isIntersecting) {
+          e.target.classList.add('visible');
+          observer.unobserve(e.target);
+        }
+      });
+    }, { threshold: 0.12 });
+    reveals.forEach(el => observer.observe(el));
+  </script>
+</body>
+</html>
